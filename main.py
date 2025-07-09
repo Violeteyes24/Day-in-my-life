@@ -506,6 +506,8 @@ while correct != 10:
 
 print("Congratulations! You passed Test #2!")
 print("You have completed both programming tests!")
+happiness += 30
+print(f'Due to productivity, happiness has increased: {happiness}')
 # programming test #1 should be about if, elif and else statements, as well as input functions (10)
 # programming test #2 should be about for loops and while loops (10)
 print('Its afternoon already, you ate lunch and talked to your family. You also do chores or buy food/things outside that is needed in the house')
@@ -797,6 +799,9 @@ while correct != 5:
 
 print("Congratulations! You passed Test #4!")
 print("You have completed all programming tests!")
+
+happiness += 30
+print(f'Due to productivity, happiness has increased: {happiness}')
 # programming test #3 should be about debugging (10)
 # programming test #4 should be about decision making scenarios if you are stuck on a problem, the context is where do you seek help with AI or try to find it on your own.(5 questions)
 
@@ -819,6 +824,328 @@ while continueTerminal != 'w':
 continueTerminal = ''
 print()
 
+hp = 100
+atk = 10
+mana = 100
+speed = 50
+skill1damage = 20
+skill2damage = speed - 50  # This is 0, so it's a stun
+ultdamage = 50
+
+# Enemy stats
+enemy_hp = 100
+enemy_atk = 10
+enemy_mana = 100
+enemy_speed = 55
+enemy_skill = 20
+enemy_ultdamage = 40
+
+# Game state variables
+player_stunned = False
+enemy_stunned = False
+turn = 1
+
+print("=" * 50)
+print("          TURN-BASED RPG BATTLE")
+print("=" * 50)
+print(f"Player: HP={hp}, ATK={atk}, MANA={mana}, SPEED={speed}")
+print(f"Enemy:  HP={enemy_hp}, ATK={enemy_atk}, MANA={enemy_mana}, SPEED={enemy_speed}")
+print("=" * 50)
+
+# Main game loop
+while hp > 0 and enemy_hp > 0:
+    print(f"\n--- TURN {turn} ---")
+    
+    # Determine who goes first based on speed
+    if speed >= enemy_speed:
+        player_first = True
+    else:
+        player_first = False
+    
+    # Player turn (if going first or enemy is stunned)
+    if player_first or enemy_stunned:
+        if not player_stunned:
+            print(f"\nPlayer's turn!")
+            print(f"Player: HP={hp}, MANA={mana}")
+            print(f"Enemy:  HP={enemy_hp}, MANA={enemy_mana}")
+            
+            print("\nChoose your action:")
+            print("1. Normal Attack (ATK damage)")
+            print("2. Skill 1 (20 damage, -20 mana)")
+            print("3. Skill 2 (Stun enemy, -30 mana)")
+            print("4. Ultimate (50 damage, -50 mana)")
+            
+            # Player input
+            while True:
+                try:
+                    action = int(input("Enter your choice (1-4): "))
+                    if action >= 1 and action <= 4:
+                        break
+                    else:
+                        print("Please enter a number between 1 and 4.")
+                except ValueError:
+                    print("Please enter a valid number.")
+            
+            # Execute player action
+            if action == 1:
+                print(f"Player attacks for {atk} damage!")
+                enemy_hp = enemy_hp - atk
+            elif action == 2:
+                if mana >= 20:
+                    print(f"Player uses Skill 1 for {skill1damage} damage!")
+                    enemy_hp = enemy_hp - skill1damage
+                    mana = mana - 20
+                else:
+                    print("Not enough mana! Normal attack instead.")
+                    enemy_hp = enemy_hp - atk
+            elif action == 3:
+                if mana >= 30:
+                    print("Player uses Skill 2 - Enemy is stunned!")
+                    enemy_stunned = True
+                    mana = mana - 30
+                else:
+                    print("Not enough mana! Normal attack instead.")
+                    enemy_hp = enemy_hp - atk
+            elif action == 4:
+                if mana >= 50:
+                    print(f"Player uses Ultimate for {ultdamage} damage!")
+                    enemy_hp = enemy_hp - ultdamage
+                    mana = mana - 50
+                else:
+                    print("Not enough mana! Normal attack instead.")
+                    enemy_hp = enemy_hp - atk
+            
+            # Pause after player action
+            continueTerminal = input('Press w and enter to continue: ')
+            while continueTerminal != 'w':
+                continueTerminal = input('Press w and enter to continue: ')
+            continueTerminal = ''
+            print()
+        else:
+            print("Player is stunned and cannot act!")
+            player_stunned = False
+            continueTerminal = input('Press w and enter to continue: ')
+            while continueTerminal != 'w':
+                continueTerminal = input('Press w and enter to continue: ')
+            continueTerminal = ''
+            print()
+    
+    # Check if enemy is defeated
+    if enemy_hp <= 0:
+        break
+    
+    # Enemy turn (if going first or player is stunned)
+    if not player_first or player_stunned:
+        if not enemy_stunned:
+            print(f"\nEnemy's turn!")
+            print(f"Player: HP={hp}, MANA={mana}")
+            print(f"Enemy:  HP={enemy_hp}, MANA={enemy_mana}")
+            
+            # Enemy AI - simple pattern
+            if turn % 3 == 1:
+                # Normal attack
+                print(f"Enemy attacks for {enemy_atk} damage!")
+                hp = hp - enemy_atk
+            elif turn % 3 == 2:
+                # Skill attack
+                if enemy_mana >= 25:
+                    print(f"Enemy uses skill for {enemy_skill} damage!")
+                    hp = hp - enemy_skill
+                    enemy_mana = enemy_mana - 25
+                else:
+                    print("Enemy is low on mana! Normal attack instead.")
+                    hp = hp - enemy_atk
+            else:
+                # Ultimate attack
+                if enemy_mana >= 40:
+                    print(f"Enemy uses ultimate for {enemy_ultdamage} damage!")
+                    hp = hp - enemy_ultdamage
+                    enemy_mana = enemy_mana - 40
+                else:
+                    print("Enemy is low on mana! Normal attack instead.")
+                    hp = hp - enemy_atk
+            
+            # Pause after enemy action
+            continueTerminal = input('Press w and enter to continue: ')
+            while continueTerminal != 'w':
+                continueTerminal = input('Press w and enter to continue: ')
+            continueTerminal = ''
+            print()
+        else:
+            print("Enemy is stunned and cannot act!")
+            enemy_stunned = False
+            continueTerminal = input('Press w and enter to continue: ')
+            while continueTerminal != 'w':
+                continueTerminal = input('Press w and enter to continue: ')
+            continueTerminal = ''
+            print()
+    
+    # Check if player is defeated
+    if hp <= 0:
+        break
+    
+    # Second turn for the slower character
+    if player_first and not enemy_stunned:
+        if not enemy_stunned:
+            print(f"\nEnemy's turn!")
+            print(f"Player: HP={hp}, MANA={mana}")
+            print(f"Enemy:  HP={enemy_hp}, MANA={enemy_mana}")
+            
+            # Enemy AI - simple pattern
+            if turn % 3 == 1:
+                # Normal attack
+                print(f"Enemy attacks for {enemy_atk} damage!")
+                hp = hp - enemy_atk
+            elif turn % 3 == 2:
+                # Skill attack
+                if enemy_mana >= 25:
+                    print(f"Enemy uses skill for {enemy_skill} damage!")
+                    hp = hp - enemy_skill
+                    enemy_mana = enemy_mana - 25
+                else:
+                    print("Enemy is low on mana! Normal attack instead.")
+                    hp = hp - enemy_atk
+            else:
+                # Ultimate attack
+                if enemy_mana >= 40:
+                    print(f"Enemy uses ultimate for {enemy_ultdamage} damage!")
+                    hp = hp - enemy_ultdamage
+                    enemy_mana = enemy_mana - 40
+                else:
+                    print("Enemy is low on mana! Normal attack instead.")
+                    hp = hp - enemy_atk
+            
+            # Pause after enemy action
+            continueTerminal = input('Press w and enter to continue: ')
+            while continueTerminal != 'w':
+                continueTerminal = input('Press w and enter to continue: ')
+            continueTerminal = ''
+            print()
+        else:
+            print("Enemy is stunned and cannot act!")
+            enemy_stunned = False
+            continueTerminal = input('Press w and enter to continue: ')
+            while continueTerminal != 'w':
+                continueTerminal = input('Press w and enter to continue: ')
+            continueTerminal = ''
+            print()
+    elif not player_first and not player_stunned:
+        if not player_stunned:
+            print(f"\nPlayer's turn!")
+            print(f"Player: HP={hp}, MANA={mana}")
+            print(f"Enemy:  HP={enemy_hp}, MANA={enemy_mana}")
+            
+            print("\nChoose your action:")
+            print("1. Normal Attack (ATK damage)")
+            print("2. Skill 1 (20 damage, -20 mana)")
+            print("3. Skill 2 (Stun enemy, -30 mana)")
+            print("4. Ultimate (50 damage, -50 mana)")
+            
+            # Player input
+            while True:
+                try:
+                    action = int(input("Enter your choice (1-4): "))
+                    if action >= 1 and action <= 4:
+                        break
+                    else:
+                        print("Please enter a number between 1 and 4.")
+                except ValueError:
+                    print("Please enter a valid number.")
+            
+            # Execute player action
+            if action == 1:
+                print(f"Player attacks for {atk} damage!")
+                enemy_hp = enemy_hp - atk
+            elif action == 2:
+                if mana >= 20:
+                    print(f"Player uses Skill 1 for {skill1damage} damage!")
+                    enemy_hp = enemy_hp - skill1damage
+                    mana = mana - 20
+                else:
+                    print("Not enough mana! Normal attack instead.")
+                    enemy_hp = enemy_hp - atk
+            elif action == 3:
+                if mana >= 30:
+                    print("Player uses Skill 2 - Enemy is stunned!")
+                    enemy_stunned = True
+                    mana = mana - 30
+                else:
+                    print("Not enough mana! Normal attack instead.")
+                    enemy_hp = enemy_hp - atk
+            elif action == 4:
+                if mana >= 50:
+                    print(f"Player uses Ultimate for {ultdamage} damage!")
+                    enemy_hp = enemy_hp - ultdamage
+                    mana = mana - 50
+                else:
+                    print("Not enough mana! Normal attack instead.")
+                    enemy_hp = enemy_hp - atk
+            
+            # Pause after player action
+            continueTerminal = input('Press w and enter to continue: ')
+            while continueTerminal != 'w':
+                continueTerminal = input('Press w and enter to continue: ')
+            continueTerminal = ''
+            print()
+        else:
+            print("Player is stunned and cannot act!")
+            player_stunned = False
+            continueTerminal = input('Press w and enter to continue: ')
+            while continueTerminal != 'w':
+                continueTerminal = input('Press w and enter to continue: ')
+            continueTerminal = ''
+            print()
+    
+    # Mana regeneration
+    if mana < 100:
+        mana = mana + 10
+        if mana > 100:
+            mana = 100
+    
+    if enemy_mana < 100:
+        enemy_mana = enemy_mana + 10
+        if enemy_mana > 100:
+            enemy_mana = 100
+    
+    # End of turn status
+    print(f"\nEnd of turn {turn}:")
+    print(f"Player: HP={hp}, MANA={mana}")
+    print(f"Enemy:  HP={enemy_hp}, MANA={enemy_mana}")
+    print("-" * 30)
+    
+    # Pause before next turn
+    continueTerminal = input('Press w and enter to continue: ')
+    while continueTerminal != 'w':
+        continueTerminal = input('Press w and enter to continue: ')
+    continueTerminal = ''
+    print()
+    
+    turn = turn + 1
+    
+    # Prevent infinite loops
+    if turn > 20:
+        print("\nBattle timeout! It's a draw!")
+        break
+
+# Battle result
+print("\n" + "=" * 50)
+if hp <= 0:
+    print("          DEFEAT!")
+    print("        Enemy wins!")
+    print("        In the end, you slept very late and highly likely you'll wake up feeling uncomfortable and this start might lead to a chain of bad events..")
+elif enemy_hp <= 0:
+    print("          VICTORY!")
+    print("        Player wins!")
+    print("        Completed a balanced and productive day! You sleep early and will wake up in a good mood.")
+
+else:
+    print("          DRAW!")
+    print("      Battle ended!")
+    print("      You still slept late, but not late enough to ruin your day tomorrow, just not as refreshed.")
+
+print("=" * 50)
+
+
 # this is where the RPG will take over. I might need to enclose the whole code with a while loop, so that it will go back to the very start and 
 # you can input what time you slept.
 
@@ -833,6 +1160,6 @@ print()
 # evening good chain of events (Dinner -> Talk to your Friends -> Fight if you still want to play more with your friends(lose game) -> Scroll -> Sleep )
 
 # to do:
-# 1. programming tests
-# 2. rpg
-# 3. validations
+# 1. programming tests - done
+# 2. rpg - done
+# 3. validations - to do in near future.
